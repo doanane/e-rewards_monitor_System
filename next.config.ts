@@ -1,35 +1,21 @@
-// import type { NextConfig } from "next";
+import type { NextConfig } from 'next'
 
-// const nextConfig: NextConfig = {
-//   /* config options here */
-// };
-
-// export default nextConfig;
-
-
-
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  // Enable React Strict Mode
+const nextConfig: NextConfig = {
   reactStrictMode: true,
-  
-  // Configure ESLint to ignore during builds (temporary solution)
   eslint: {
-    ignoreDuringBuilds: true,
+    // Only run ESLint during builds for these directories
+    dirs: ['src', 'pages', 'components', 'app'],
   },
-  
-  // Enable TypeScript checking during build
   typescript: {
-    ignoreBuildErrors: false, // Set to true only if needed temporarily
+    // Don't ignore build errors
+    ignoreBuildErrors: false,
   },
-  
-  // Add any other Next.js configuration you need
   images: {
-    domains: ['example.com'], // Add domains for external images
+    // Add domains for external images (if needed)
+    domains: ['example.com'],
   },
-  
-  // Optional: Enable SWC minification (faster builds)
+  // Enable SWC for faster compilation
   swcMinify: true,
 }
 
-module.exports = nextConfig
+export default nextConfig
