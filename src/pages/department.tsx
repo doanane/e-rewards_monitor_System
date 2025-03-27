@@ -3,13 +3,26 @@ import {
   BarChart, Bar, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
-import Select from 'react-select';
+import Select, { SingleValue } from 'react-select';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUsers, faTrophy, faChartLine, faExchangeAlt } from '@fortawesome/free-solid-svg-icons';
 
+interface Department {
+  name: string;
+  points: number;
+  redemptions: number;
+  participation: number;
+  topReward: string;
+}
+
+interface OptionType {
+  value: string;
+  label: string;
+}
+
 const DepartmentsPage = () => {
   // Sample data - replace with your API data
-  const departmentData = [
+  const departmentData: Department[] = [
     { name: 'Sales', points: 18500, redemptions: 68, participation: 92, topReward: 'Amazon Gift Card' },
     { name: 'Engineering', points: 14200, redemptions: 54, participation: 88, topReward: 'Tech Conferences' },
     { name: 'Marketing', points: 12600, redemptions: 47, participation: 85, topReward: 'Creative Subscriptions' },
@@ -21,21 +34,33 @@ const DepartmentsPage = () => {
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'];
 
   // Filter options
-  const metricOptions = [
+  const metricOptions: OptionType[] = [
     { value: 'points', label: 'Reward Points' },
     { value: 'redemptions', label: 'Redemptions' },
     { value: 'participation', label: 'Participation Rate' },
   ];
 
-  const timeOptions = [
+  const timeOptions: OptionType[] = [
     { value: 'month', label: 'Last Month' },
     { value: 'quarter', label: 'Last Quarter' },
     { value: 'year', label: 'Last Year' },
   ];
 
-  const [selectedMetric, setSelectedMetric] = useState(metricOptions[0]);
-  const [selectedTimeframe, setSelectedTimeframe] = useState(timeOptions[0]);
-  const [selectedDepartment, setSelectedDepartment] = useState(null);
+  const [selectedMetric, setSelectedMetric] = useState<OptionType>(metricOptions[0]);
+  const [selectedTimeframe, setSelectedTimeframe] = useState<OptionType>(timeOptions[0]);
+  const [selectedDepartment, setSelectedDepartment] = useState<string | null>(null);
+
+  const handleMetricChange = (newValue: SingleValue<OptionType>) => {
+    if (newValue) {
+      setSelectedMetric(newValue);
+    }
+  };
+
+  const handleTimeframeChange = (newValue: SingleValue<OptionType>) => {
+    if (newValue) {
+      setSelectedTimeframe(newValue);
+    }
+  };
 
   return (
     <div className="container mx-auto p-6">
@@ -86,19 +111,19 @@ const DepartmentsPage = () => {
         <div className="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0">
           <div className="flex-1">
             <label className="block text-sm font-medium mb-1">Metric</label>
-            <Select
+            <Select<OptionType>
               options={metricOptions}
               value={selectedMetric}
-              onChange={setSelectedMetric}
+              onChange={handleMetricChange}
               isSearchable={false}
             />
           </div>
           <div className="flex-1">
             <label className="block text-sm font-medium mb-1">Timeframe</label>
-            <Select
+            <Select<OptionType>
               options={timeOptions}
               value={selectedTimeframe}
-              onChange={setSelectedTimeframe}
+              onChange={handleTimeframeChange}
               isSearchable={false}
             />
           </div>
@@ -233,7 +258,6 @@ const DepartmentsPage = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">14 days</td>
                 </tr>
-                {/* Add more reward rows as needed */}
               </tbody>
             </table>
           </div>
