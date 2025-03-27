@@ -46,7 +46,7 @@ const DepartmentsPage = () => {
     { value: 'year', label: 'Last Year' },
   ];
 
-  const [selectedMetric, setSelectedMetric] = useState<OptionType>(metricOptions[0]);
+  const [selectedMetric, setSelectedMetric] = useState<{ value: string; label: string } | null>(metricOptions[0]);
   const [selectedTimeframe, setSelectedTimeframe] = useState<OptionType>(timeOptions[0]);
   const [selectedDepartment, setSelectedDepartment] = useState<string | null>(null);
 
