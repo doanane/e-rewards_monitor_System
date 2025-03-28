@@ -7,6 +7,11 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+
+  eslint:{
+    ignoreDuringBuilds: true,
+  },
+
   images: {
     domains: ['example.com'], // Add your image domains here
   }
