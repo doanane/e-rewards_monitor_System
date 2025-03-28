@@ -3,16 +3,42 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
   PieChart, Pie, Cell
 } from 'recharts';
-import Select from 'react-select';
+import Select, { SingleValue } from 'react-select';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faUser, faTrophy, faStar, faMedal,
   faSearch, faFilter, faPlus, faDownload
 } from '@fortawesome/free-solid-svg-icons';
 
+interface Employee {
+  id: number;
+  name: string;
+  department: string;
+  position: string;
+  points: number;
+  redemptions: number;
+  lastActivity: string;
+  status: 'active' | 'inactive';
+}
+
+interface DepartmentDistribution {
+  name: string;
+  value: number;
+}
+
+interface PointsDistribution {
+  name: string;
+  employees: number;
+}
+
+interface SelectOption {
+  value: string;
+  label: string;
+}
+
 const EmployeesPage = () => {
   // Sample employee data - replace with API calls
-  const [employees, setEmployees] = useState([
+  const [employees, setEmployees] = useState<Employee[]>([
     {
       id: 1,
       name: 'Sarah Johnson',
@@ -36,13 +62,13 @@ const EmployeesPage = () => {
     // Add more employees...
   ]);
 
-  const [filteredEmployees, setFilteredEmployees] = useState(employees);
+  const [filteredEmployees, setFilteredEmployees] = useState<Employee[]>(employees);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDepartment, setSelectedDepartment] = useState('all');
   const [selectedStatus, setSelectedStatus] = useState('all');
 
   // Filter options
-  const departmentOptions = [
+  const departmentOptions: SelectOption[] = [
     { value: 'all', label: 'All Departments' },
     { value: 'Marketing', label: 'Marketing' },
     { value: 'Engineering', label: 'Engineering' },
@@ -50,7 +76,7 @@ const EmployeesPage = () => {
     { value: 'HR', label: 'Human Resources' },
   ];
 
-  const statusOptions = [
+  const statusOptions: SelectOption[] = [
     { value: 'all', label: 'All Statuses' },
     { value: 'active', label: 'Active' },
     { value: 'inactive', label: 'Inactive' },
@@ -72,7 +98,7 @@ const EmployeesPage = () => {
   }, [searchTerm, selectedDepartment, selectedStatus, employees]);
 
   // Data for charts
-  const departmentDistribution = employees.reduce((acc, employee) => {
+  const departmentDistribution: DepartmentDistribution[] = employees.reduce((acc: DepartmentDistribution[], employee: Employee) => {
     const existingDept = acc.find(item => item.name === employee.department);
     if (existingDept) {
       existingDept.value += 1;
@@ -82,7 +108,7 @@ const EmployeesPage = () => {
     return acc;
   }, []);
 
-  const pointsDistribution = [
+  const pointsDistribution: PointsDistribution[] = [
     { name: '0-500', employees: employees.filter(e => e.points <= 500).length },
     { name: '501-1000', employees: employees.filter(e => e.points > 500 && e.points <= 1000).length },
     { name: '1001-2000', employees: employees.filter(e => e.points > 1000 && e.points <= 2000).length },
@@ -90,6 +116,14 @@ const EmployeesPage = () => {
   ];
 
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+
+  const handleDepartmentChange = (option: SingleValue<SelectOption>) => {
+    setSelectedDepartment(option?.value || 'all');
+  };
+
+  const handleStatusChange = (option: SingleValue<SelectOption>) => {
+    setSelectedStatus(option?.value || 'all');
+  };
 
   return (
     <div className="container mx-auto p-6">
@@ -206,19 +240,19 @@ const EmployeesPage = () => {
           </div>
           <div className="flex-1">
             <label className="block text-sm font-medium mb-1">Department</label>
-            <Select
+            <Select<SelectOption>
               options={departmentOptions}
               defaultValue={departmentOptions[0]}
-              onChange={(option) => setSelectedDepartment(option.value)}
+              onChange={handleDepartmentChange}
               isSearchable={false}
             />
           </div>
           <div className="flex-1">
             <label className="block text-sm font-medium mb-1">Status</label>
-            <Select
+            <Select<SelectOption>
               options={statusOptions}
               defaultValue={statusOptions[0]}
-              onChange={(option) => setSelectedStatus(option.value)}
+              onChange={handleStatusChange}
               isSearchable={false}
             />
           </div>
@@ -296,7 +330,7 @@ const EmployeesPage = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="8" className="px-6 py-4 text-center text-gray-500">
+                  <td colSpan={8} className="px-6 py-4 text-center text-gray-500">
                     No employees match your filters
                   </td>
                 </tr>

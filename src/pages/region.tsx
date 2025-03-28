@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react'; // Removed unused useState import
 import { 
   BarChart, Bar, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer 
-} from 'recharts';
+} from 'recharts'; // Keeping all chart imports even if unused
 import WorldMap from 'react-svg-worldmap';
-import Select from 'react-select';
+import Select from 'react-select'; // Keeping Select import even if unused
 
 const RegionsPage = () => {
   // Sample data with validation

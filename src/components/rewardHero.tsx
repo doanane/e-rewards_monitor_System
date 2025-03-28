@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
+import Link from 'next/link'; // Keeping this import as requested
 
 const RewardHero = () => {
   const rewardCategories = [
@@ -17,7 +17,7 @@ const RewardHero = () => {
       setCurrentCategory((prev) => (prev + 1) % rewardCategories.length);
     }, 2000);
     return () => clearInterval(interval);
-  }, []);
+  }, [rewardCategories.length]); // Added missing dependency
 
   return (
     <section className="relative bg-gradient-to-br from-indigo-700 to-purple-800 text-white py-20 md:py-28">
